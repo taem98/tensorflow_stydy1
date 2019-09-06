@@ -264,6 +264,8 @@ hypothesis = W * X + b
 cost = tf.reduce_mean(tf.square(hypothesis -Y))
 ```
 
+- reduce_mean : 특정 차원을 제거하고 평균을 구한다.
+
 [다양한 텐서플로 함수들](https://www.tensorflow.org/api_docs/)
 
 <br/>

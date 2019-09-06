@@ -6,8 +6,8 @@ y_data = [1,2,3]
 W = tf.Variable(tf.random_uniform([1], -1.0, 1.0))
 b = tf.Variable(tf.random_uniform([1], -1.0, 1.0))
 
-X = tf.placeholder(tf.float32, name="X") # <tf.Variable 'Variable:0' shape=(1,) dtype=float32_ref>
-Y = tf.placeholder(tf.float32, name="Y") # <tf.Variable 'Variable_1:0' shape=(1,) dtype=float32_ref>
+X = tf.placeholder(tf.float32, name="X") 
+Y = tf.placeholder(tf.float32, name="Y") 
 
 hypothesis = W * X + b
 
