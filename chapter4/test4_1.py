@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# 한국어 인코딩
 import tensorflow as tf
 import numpy as np
 

@@ -189,3 +189,72 @@ print('정확도: %.2f' % sess.run(accuracy * 100, feed_dict={X:x_data, Y:y_data
 <br/><br/>
 손실값이 점점 줄어드는 것을 확인할 수 있다.
 
+하지만, 학습 횟수를 아무리 늘려도 정확도가 크게 높아지지 않는다.<br/>
+그 이유은 신경망이 한 층 밖에 안 되기 때문인데, 층 하나만 더 늘리면 쉽게 해결 가능하다.
+
+## 4.3 심층 신경망 구현하기
+
+> 신경망의 층을 둘 이상으로 구성한 심층 신경, 즉, 딥러닝을 구현해보자
+
+앞서 만들었던 신경망 모델에 가중치와 편향을 추가하면 된다.
+
+```python
+W1 = tf.Variable(tf.random_uniform([2,10], -1, 1))
+W2 = tf.Variable(tf.random_uniform([10, 3], -1, 1))
+
+b1 = tf.Variable(tf.zeros([10]))
+b2 = tf.Variable(tf.zeros([3]))
+```
+위 코드의 의미
+```python
+#가중치
+W1 = [2, 10] -> [특징, 은닉층의 뉴런 수 ]
+W2 = [10, 3] -> [은닉층의 뉴런 수, 분류 수]
+
+#편향
+b1 = [10] -> 은닉층의 뉴런 수
+b2 = [3] -> 분류 수
+```
+- 입력층 : 특징
+- 출력층 : 분류 개수
+- 중간의 연결 부분 : 맞닿은 층의 뉴런 수
+    - 중간의 연결부분을 **은닉층**이라 하며, 은닉층의 뉴런 수는 하이퍼파라미터이니 실험을 통해 가장 적절한 수를 정하면 된다.
+
+<br/>
+특징 입력값 <- 첫 번째 가중치, 편향, 활성화 함수
+
+```python
+L1 = tf.add(tf.matmul(X, W1), b1)
+L1 = tf.nn.relu(L1)
+```
+- 출력층
+    - 두 번째 가중치와 편향을 적용하여 최종 모델을 만든다.
+    - 은닉층에 두 번째 가중치 W2[10, 3]와 편향 b2[3]을 적용하면 3개의 출력값을 가진다
+    
+```python
+model = tf.add(tf.matmul(L1, W2), b2)
+```
+
+> 앞 절에서 본 기본 신경망 모델에서는 출력층에 활성화 함수를 적용하였으나, 보통 출력층에 활성화함수를 사용하지 않는다.
+
+- 손실함수 작성
+    - 교차 엔트로피 함수 사용
+        - 다만, 이번에는 텐서플로가 기본 제공하는 교차 엔트로피 함수를 이용
+
+```python
+cost = tf.reduce_mean(
+    tf.nn.softmax_cross_entropy_with_logits_v2(labels=Y, logits=model)
+)
+
+optimizer = tf.train.AdamOptimizer(learning_rate=0.01)
+train_op = optimizer.minimize(cost)
+```
+- 최적화 함수 `AdamOptimizer`
+    - 앞서 사용했던 `GradientDescentOptimizer`보다 보편적으로 성능이 좋다.
+    - 하지만 모두 좋은 것은 아님
+
+- 앞과 같이 쓰는 코드
+    - 학습 진행
+    - 손실값
+    - 정확도 측정
+    
