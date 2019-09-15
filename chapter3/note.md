@@ -170,6 +170,7 @@ print(sess.run(expr, feed_dict={X:x_data}))
 
 sess.close()
 ```
+
 - tf.global_variables_initializer()
     - 앞에서 정의한 변수들을 초기화
     - 기존에 학습한 값들을 가져와서 사용하는 것이 아닌 **처음 실행하는 것**이라면, 연산 실행 전에 꼭 사용해서 변수들을 초기화 해야함
@@ -182,6 +183,7 @@ expr수식에는 X, W, b를 사용했는데 이 중에서 X가 플레이스홀�
 따라서 미리 정의해둔 x_data를 X의 값으로 넣어주었다.
 <br/>
 <br/>
+
 ```python
 # 결과
 ======= x_data =======
