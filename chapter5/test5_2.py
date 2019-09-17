@@ -52,13 +52,16 @@ else:
     sess.run(tf.global_variables_initializer())
 
 merged = tf.summary.merge_all()
-writer = tf.summary.FileWirter('./logs',sess.graph)
+writer = tf.summary.FileWriter('./logs',sess.graph)
 
 for step in range(100):
     sess.run(train_op, feed_dict={X:x_data, Y:y_data})
 
     print('Step: %d' % sess.run(global_step),
     'Cost %.3f:' % sess.run(cost, feed_dict={X:x_data, Y:y_data}))
+
+    summary = sess.run(merged, feed_dict={X:x_data, Y:y_data})
+    writer.add_summary(summary, global_step = sess.run(global_step))
 
 saver.save(sess, './model/dnn.ckpt', global_step=global_step)
 
@@ -74,3 +77,5 @@ print('결과값 :', sess.run(target, feed_dict={Y:y_data}))
 is_correct = tf.equal(prediction, target)
 accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
 print('정확도 : %.2f' % sess.run(accuracy * 100, feed_dict={X:x_data, Y:y_data}))
+
+tf.summary.histogram("Weights", W1)
